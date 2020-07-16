@@ -1,7 +1,7 @@
 use ckb_vm::instructions::Register;
 use ckb_vm::memory::Memory;
 
-const SYSCODE_GET_ASSET_BALANCE: i64 = 2100;
+const SYSCODE_GET_ASSET_BALANCE: i64 = 2000;
 
 pub fn get_arr<Mac: ckb_vm::SupportMachine>(
     machine: &mut Mac,
@@ -43,7 +43,7 @@ impl<Mac: ckb_vm::SupportMachine> ckb_vm::Syscalls<Mac> for SyscallDebug {
         let s_ptr = machine.registers()[ckb_vm::registers::A0].to_u64() as usize;
         let s_len = machine.registers()[ckb_vm::registers::A1].to_u64() as usize;
         let s = String::from_utf8(get_arr(machine, s_ptr, s_len)?).unwrap();
-        println!("{:?}", s);
+        println!("debug: {}", s);
         machine.set_register(ckb_vm::registers::A0, Mac::REG::from_i64(0));
         Ok(true)
     }
