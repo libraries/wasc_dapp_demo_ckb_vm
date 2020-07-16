@@ -1,6 +1,7 @@
 use ckb_vm::machine::SupportMachine;
 
 mod cost_model;
+mod syscall;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<bytes::Bytes> = std::env::args().map(|a| a.into()).collect();
@@ -12,6 +13,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ckb_vm::DefaultCoreMachine<u64, ckb_vm::FlatMemory<u64>>,
     >::new(core_machine)
     .instruction_cycle_func(Box::new(cost_model::instruction_cycles))
+    .syscall(Box::new(syscall::SyscallDebug::new()))
     .build();
 
     machine.load_program(&data, &args[1..])?;
